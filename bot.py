@@ -14,8 +14,16 @@ client = discord.Client()
 async def on_ready():
     guild = discord.utils.get(client.guilds, name=GUILD)
     print(
-        f'{client.user} is connected to the following guild:\n'
+        f'{client.user.name} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})'
+    )
+
+@client.event
+async def on_member_join(member):
+    guild = discord.utils.get(client.guilds, name=GUILD)
+    await member.create_dm()
+    await member.dm_channel.send(
+        f'Hi {member.name}, welcome to {guild.name}!'
     )
 
 client.run(TOKEN)
