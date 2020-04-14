@@ -1,5 +1,6 @@
 # bot.py
 import os
+import random
 
 import discord
 from dotenv import load_dotenv
@@ -25,5 +26,16 @@ async def on_member_join(member):
     await member.dm_channel.send(
         f'Hi {member.name}, welcome to {guild.name}!'
     )
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    if message.content == "~assemble":
+        response = "Avenger Bots, Roll Out."
+        await message.channel.send(response)
+    elif 'happy birthday' in message.content.lower():
+        await message.channel.send('Happy Birthday!');
 
 client.run(TOKEN)
