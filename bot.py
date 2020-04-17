@@ -15,8 +15,8 @@ GUILD = os.getenv('DISCORD_GUILD')
 
 roleID = "<@&675471556926767164>"
 now = datetime.datetime.now()
-currHour = now.hour
-lastHour = currHour
+lastHour = now.hour
+
 hourDic = {0:"12 am", 1:"1 am", 2:"2 am", 3:"3 am", 4:"4 am", 5:"5 am",
            6:"6am", 7:"7 am", 8:"8 am", 9:"9 am", 10:"10 am", 11:"11 am",
            12:"12 pm", 13:"1 pm", 14:"2 pm", 15:"3 pm", 16:"4 pm", 17:"5 pm",
@@ -26,13 +26,27 @@ client = discord.Client()
 
 async def my_background_task():
     await client.wait_until_ready()
+    now = datetime.datetime.now()
+    currHour = now.hour
+    lastHour = currHour
     
     while not client.is_closed():
         now = datetime.datetime.now()
         currHour = now.hour
 
-        if currHour != lastHour
+        if currHour != lastHour:
             # Write code here to move people
+            print("THE HOUR HAS CHANGED")
+            guild = discord.utils.get(client.guilds, name=GUILD)
+            voiceChannel = discord.utils.get(guild.voice_channels,
+                                         name=hourDic[lastHour])
+            textChannel = discord.utils.get(guild.text_channels,
+                                         name="general")
+
+            for member in voiceChannel.members:
+                response = "{}, go to {}.".format(member.mention,
+                                                  hourDic[currHour])
+                await textChannel.send(response)
 
             lastHour = currHour
         else:
@@ -53,7 +67,7 @@ async def on_ready():
     #for r in guild.roles:
         #print(r)
 
-    print(hourDic[currHour])
+    print(hourDic[now.hour])
 
 
 @client.event
