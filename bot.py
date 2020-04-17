@@ -20,8 +20,8 @@ async def on_ready():
         f'{guild.name}(id: {guild.id})'
     )
 
-    for r in guild.roles:
-        print(r)
+    #for r in guild.roles:
+        #print(r)
 
 @client.event
 async def on_member_join(member):
@@ -52,5 +52,10 @@ async def on_message(message):
     elif mContent == 'raise-exception':
         raise discord.DiscordException
 
+    elif mContent == '~users':
+        voiceChannel = discord.utils.get(guild.voice_channels, name="8 pm")
+
+        for member in voiceChannel.members:
+            await message.channel.send(member);
 
 client.run(TOKEN)
