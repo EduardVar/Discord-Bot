@@ -34,10 +34,11 @@ async def my_background_task():
         now = datetime.datetime.now()
         currHour = now.hour
 
+        guild = discord.utils.get(client.guilds, name=GUILD)
+
         if currHour != lastHour:
             # Write code here to move people
             print("THE HOUR HAS CHANGED")
-            guild = discord.utils.get(client.guilds, name=GUILD)
             voiceChannel = discord.utils.get(guild.voice_channels,
                                          name=hourDic[lastHour])
             destination = discord.utils.get(guild.voice_channels,
@@ -52,7 +53,19 @@ async def my_background_task():
             print("Second: " + str(now.second))
             print("Hour: " + str(now.hour))
 
-        await asyncio.sleep(5) # task runs every 5 seconds
+
+        # Category move
+        timeCategory = discord.utils.get(guild.categories, name="Times")
+        vcs = timeCategory.voice_channels
+
+        for channel in vcs:
+            for member in channel.members:
+                if channel.name != hourDic[currHour]:
+                    destination = discord.utils.get(guild.voice_channels,
+                                         name=hourDic[currHour])
+                    await member.move_to(destination)
+
+        await asyncio.sleep(2) # task runs every 2 second
 
 @client.event
 async def on_ready():
