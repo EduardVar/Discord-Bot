@@ -40,13 +40,11 @@ async def my_background_task():
             guild = discord.utils.get(client.guilds, name=GUILD)
             voiceChannel = discord.utils.get(guild.voice_channels,
                                          name=hourDic[lastHour])
-            textChannel = discord.utils.get(guild.text_channels,
-                                         name="general")
+            destination = discord.utils.get(guild.voice_channels,
+                                         name=hourDic[currHour])
 
             for member in voiceChannel.members:
-                response = "{}, go to {}.".format(member.mention,
-                                                  hourDic[currHour])
-                await textChannel.send(response)
+                await member.move_to(destination)
 
             lastHour = currHour
         else:
@@ -101,10 +99,19 @@ async def on_message(message):
 
     elif mContent == '~users':
         voiceChannel = discord.utils.get(guild.voice_channels,
-                                         name=hourDic[currHour])
+                                         name=hourDic[now.hour])
 
         for member in voiceChannel.members:
             await message.channel.send(member);
+
+    elif mContent == "~move":
+        voiceChannel = discord.utils.get(guild.voice_channels,
+                                         name="General")
+        destination = discord.utils.get(guild.voice_channels,
+                                     name="School")
+
+        for member in voiceChannel.members:
+            await member.move_to(destination)
 
 client.loop.create_task(my_background_task())
 client.run(TOKEN)
