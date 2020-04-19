@@ -1,11 +1,10 @@
 # bot.py
 import os
 import random
+import datetime
 
 import discord
 import asyncio
-
-import datetime
 
 from dotenv import load_dotenv
 
@@ -24,7 +23,7 @@ hourDic = {0:"12 am", 1:"1 am", 2:"2 am", 3:"3 am", 4:"4 am", 5:"5 am",
 
 client = discord.Client()
 
-async def my_background_task():
+async def move_task():
     await client.wait_until_ready()
     now = datetime.datetime.now()
     currHour = now.hour
@@ -48,10 +47,6 @@ async def my_background_task():
                 await member.move_to(destination)
 
             lastHour = currHour
-        else:
-            print("LOOP")
-            print("Second: " + str(now.second))
-            print("Hour: " + str(now.hour))
 
 
         # Category move
@@ -65,7 +60,7 @@ async def my_background_task():
                                          name=hourDic[currHour])
                     await member.move_to(destination)
 
-        await asyncio.sleep(2) # task runs every 2 second
+        await asyncio.sleep(1) # task runs every second
 
 @client.event
 async def on_ready():
@@ -74,12 +69,6 @@ async def on_ready():
         f'{client.user.name} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})'
     )
-
-    #for r in guild.roles:
-        #print(r)
-
-    print(hourDic[now.hour])
-
 
 @client.event
 async def on_member_join(member):
@@ -90,8 +79,7 @@ async def on_member_join(member):
     )
 
 @client.event
-async def on_message(message):
-    
+async def on_message(message): 
     if message.author == client.user:
         return
 
@@ -103,28 +91,7 @@ async def on_message(message):
         
         response = "{}, Roll Out.".format(role.mention)
         await message.channel.send(response)
-        
-    elif '~closed?' in mContent.lower():
-        print(not client.is_closed())
 
-    elif mContent == 'raise-exception':
-        raise discord.DiscordException
 
-    elif mContent == '~users':
-        voiceChannel = discord.utils.get(guild.voice_channels,
-                                         name=hourDic[now.hour])
-
-        for member in voiceChannel.members:
-            await message.channel.send(member);
-
-    elif mContent == "~move":
-        voiceChannel = discord.utils.get(guild.voice_channels,
-                                         name="General")
-        destination = discord.utils.get(guild.voice_channels,
-                                     name="School")
-
-        for member in voiceChannel.members:
-            await member.move_to(destination)
-
-client.loop.create_task(my_background_task())
+client.loop.create_task(move_task())
 client.run(TOKEN)
