@@ -7,6 +7,7 @@ import discord
 import asyncio
 
 from dotenv import load_dotenv
+from bot_funcs import checkTime, moveInCategory
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -28,37 +29,13 @@ async def move_task():
     now = datetime.datetime.now()
     currHour = now.hour
     lastHour = currHour
+
+    guild = discord.utils.get(client.guilds, name=GUILD)
     
     while not client.is_closed():
-        now = datetime.datetime.now()
-        currHour = now.hour
+        lastHour = await checkTime(now, currHour, lastHour, guild)
 
-        guild = discord.utils.get(client.guilds, name=GUILD)
-
-        if currHour != lastHour:
-            # Write code here to move people
-            print("THE HOUR HAS CHANGED")
-            voiceChannel = discord.utils.get(guild.voice_channels,
-                                         name=hourDic[lastHour])
-            destination = discord.utils.get(guild.voice_channels,
-                                         name=hourDic[currHour])
-
-            for member in voiceChannel.members:
-                await member.move_to(destination)
-
-            lastHour = currHour
-
-
-        # Category move
-        timeCategory = discord.utils.get(guild.categories, name="Times")
-        vcs = timeCategory.voice_channels
-
-        for channel in vcs:
-            for member in channel.members:
-                if channel.name != hourDic[currHour]:
-                    destination = discord.utils.get(guild.voice_channels,
-                                         name=hourDic[currHour])
-                    await member.move_to(destination)
+        await moveInCategory(currHour, guild)
 
         await asyncio.sleep(1) # task runs every second
 
