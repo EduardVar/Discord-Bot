@@ -33,7 +33,7 @@ async def move_task():
     guild = discord.utils.get(client.guilds, name=GUILD)
     
     while not client.is_closed():
-        lastHour = await checkTime(now, currHour, lastHour, guild)
+        currHour, lastHour = await checkTime(now, currHour, lastHour, guild)
 
         await moveInCategory(currHour, guild)
 

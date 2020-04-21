@@ -22,12 +22,14 @@ async def checkTime(now, currHour, lastHour, guild):
         destination = discord.utils.get(guild.voice_channels,
                                          name=hourDic[currHour])
 
+        print(lastHour, " ", currHour)
+
         for member in voiceChannel.members:
             await member.move_to(destination)
 
     # Will update lastHour if currHour has changed
     lastHour = currHour
-    return currHour
+    return currHour, lastHour
 
 async def moveInCategory(currHour, guild):
     # Category move
