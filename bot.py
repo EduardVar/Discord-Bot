@@ -23,6 +23,7 @@ hourDic = {0:"12 am", 1:"1 am", 2:"2 am", 3:"3 am", 4:"4 am", 5:"5 am",
            12:"12 pm", 13:"1 pm", 14:"2 pm", 15:"3 pm", 16:"4 pm", 17:"5 pm",
            18:"6 pm", 19:"7 pm", 20:"8 pm", 21:"9 pm", 22:"10 pm", 23:"11 pm"}
 
+userStreaming = False
 client = discord.Client()
 
 async def move_task():
@@ -34,11 +35,17 @@ async def move_task():
     guild = discord.utils.get(client.guilds, name=GUILD)
     
     while not client.is_closed():
-        currHour, lastHour = await checkTime(now, currHour, lastHour, guild)
+        now = datetime.datetime.now()
+        currHour = now.hour
 
-        await moveInCategory(currHour, guild)
+        
+        
+        if not userStreaming:
+            currHour, lastHour = await checkTime(now, currHour, lastHour, guild)
 
-        await asyncio.sleep(1) # task runs every second
+            await moveInCategory(currHour, guild)
+
+            await asyncio.sleep(1) # task runs every second
 
 @client.event
 async def on_ready():

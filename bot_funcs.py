@@ -11,9 +11,6 @@ currHour = now.hour
 lastHour = currHour
 
 async def checkTime(now, currHour, lastHour, guild):
-    now = datetime.datetime.now()
-    currHour = now.hour
-
     if currHour != lastHour:
         # Write code here to move people
         print("It is now", hourDic[currHour])
