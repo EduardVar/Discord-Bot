@@ -15,6 +15,7 @@ GUILD = os.getenv('DISCORD_GUILD')
 
 roleID = "<@&675471556926767164>"
 now = datetime.datetime.now()
+currHour = now.hour
 lastHour = now.hour
 
 hourDic = {0:"12 am", 1:"1 am", 2:"2 am", 3:"3 am", 4:"4 am", 5:"5 am",
@@ -68,6 +69,13 @@ async def on_message(message):
         
         response = "{}, Roll Out.".format(role.mention)
         await message.channel.send(response)
+
+    if mContent == "~streaming?":
+        voiceChannel = discord.utils.get(guild.voice_channels,
+                                         name=hourDic[currHour])
+
+        for member in voiceChannel.members:
+            print(member.name, ":", member.voice.self_stream)
 
 
 client.loop.create_task(move_task())
