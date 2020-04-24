@@ -10,16 +10,30 @@ now = datetime.datetime.now()
 currHour = now.hour
 lastHour = currHour
 
-async def checkTime(now, currHour, lastHour, guild):
+async def updateTime():
+    global currHour
+    global lastHour
+    
+    lastHour = currHour
+    
+    now = datetime.datetime.now()
+    currHour = now.hour
+
+    return currHour, lastHour
+
+async def checkIfStreaming(guild):
+    streaming = False
+    
+    if currHour != lastHour:
+        voiceChannel = await getHourChannel(lastHour, guild)
+    
+
+async def moveNewTime(currHour, lastHour, guild):
     if currHour != lastHour:
         # Write code here to move people
         print("It is now", hourDic[currHour])
-        voiceChannel = discord.utils.get(guild.voice_channels,
-                                         name=hourDic[lastHour])
-        destination = discord.utils.get(guild.voice_channels,
-                                         name=hourDic[currHour])
-
-        print(lastHour, " ", currHour)
+        voiceChannel = await getHourChannel(lastHour, guild)
+        destination = await getHourChannel(currHour, guild)
 
         for member in voiceChannel.members:
             await member.move_to(destination)
@@ -36,8 +50,9 @@ async def moveInCategory(currHour, guild):
     for channel in vcs:
         for member in channel.members:
             if channel.name != hourDic[currHour]:
-                destination = discord.utils.get(guild.voice_channels,
-                                                name=hourDic[currHour])
+                destination = await getHourChannel(currHour, guild)
                 await member.move_to(destination)
 
+async def getHourChannel(hour, guild):
+    return discord.utils.get(guild.voice_channels, name=hourDic[hour])
                     
