@@ -13,7 +13,6 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
-userStreaming = False
 client = discord.Client()
 
 async def move_task():
@@ -21,17 +20,32 @@ async def move_task():
 
     guild = discord.utils.get(client.guilds, name=GUILD)
     streamHour = -1
+
+    userStreaming = False
+    wasStreaming = False
     
     while not client.is_closed():
-
         currHour, lastHour = await updateTime()
+
+        a, b, c = await checkIfStreaming(guild, streamHour,userStreaming)
+        userStreaming, streamHour, wasStreaming = a, b, c
         
         if not userStreaming:
-            currHour, lastHour = await moveNewTime(currHour, lastHour, guild)
+            if wasStreaming:
+                await moveInCategory(currHour, guild)
 
-            await moveInCategory(currHour, guild)
+                wasStreaming = False
+            else:
+                currHour, lastHour = await moveNewTime(currHour,
+                                                       lastHour, guild)
+                await moveInCategory(currHour, guild)
+            
+        else:         
+            await moveInCategory(streamHour, guild)
 
-            await asyncio.sleep(1) # task runs every second
+            wasStreaming = True
+
+        await asyncio.sleep(1) # task runs every second
 
 @client.event
 async def on_ready():

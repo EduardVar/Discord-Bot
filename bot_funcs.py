@@ -21,11 +21,40 @@ async def updateTime():
 
     return currHour, lastHour
 
-async def checkIfStreaming(guild):
+async def checkIfStreaming(guild, streamHour, wasStreaming):
+    global lastHour
+
     streaming = False
+
+    if not wasStreaming:
+        streamHour = lastHour
     
     if currHour != lastHour:
         voiceChannel = await getHourChannel(lastHour, guild)
+        textChannel = discord.utils.get(guild.text_channels, name="general")
+
+        for member in voiceChannel.members:
+            if member.voice.self_stream:
+                streaming = True
+                response = ("{}, you're still streaming; when everyone "
+                            "stops streaming, I'll move everyone to the"
+                            " correct channel.").format(member.mention)
+                await textChannel.send(response)
+
+        # Updates lastHour to currHour
+        lastHour = currHour
+
+    return streaming, streamHour, wasStreaming
+        
+
+async def stillStreaming(guild):
+    voiceChannel = await getHourChannel(lastHour, guild)
+
+    for member in voiceChannel.members:
+        if member.voice.self_stream:
+            return True
+
+    return False
     
 
 async def moveNewTime(currHour, lastHour, guild):
