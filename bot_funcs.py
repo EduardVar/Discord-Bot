@@ -30,16 +30,19 @@ async def checkIfStreaming(guild, streamHour, wasStreaming):
         streamHour = lastHour
     
     if currHour != streamHour:
-        voiceChannel = await getHourChannel(lastHour, guild)
+        voiceChannel = await getHourChannel(streamHour, guild) #lastHour
         textChannel = discord.utils.get(guild.text_channels, name="general")
 
         for member in voiceChannel.members:
             if member.voice.self_stream:
                 streaming = True
-                response = ("{}, you're still streaming; when everyone "
-                            "stops streaming, I'll move everyone to the"
-                            " correct channel.").format(member.mention)
-                await textChannel.send(response)
+
+                if not wasStreaming:
+                    response = ("{}, you're still streaming; when there are no "
+                                "streams left in your voice channel, I'll move "
+                                "everyone to the "
+                                "correct channel.").format(member.mention)
+                    await textChannel.send(response)
 
         # Updates lastHour to currHour
         lastHour = currHour

@@ -27,7 +27,7 @@ async def move_task():
     while not client.is_closed():
         currHour, lastHour = await updateTime()
 
-        a, b, c = await checkIfStreaming(guild, streamHour,userStreaming)
+        a, b, c = await checkIfStreaming(guild, streamHour, wasStreaming)
         userStreaming, streamHour, wasStreaming = a, b, c
         
         if not userStreaming:
@@ -35,15 +35,18 @@ async def move_task():
                 await moveInCategory(currHour, guild)
 
                 wasStreaming = False
+                print("A: !userStreaming and wasStreaming")
             else:
                 currHour, lastHour = await moveNewTime(currHour,
                                                        lastHour, guild)
                 await moveInCategory(currHour, guild)
+                #print("B: !userStreaming and !wasStreaming")
             
         else:         
             await moveInCategory(streamHour, guild)
 
             wasStreaming = True
+            print("C: userStreaming")
 
         await asyncio.sleep(1) # task runs every second
 
