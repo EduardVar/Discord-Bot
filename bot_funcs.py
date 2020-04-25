@@ -29,7 +29,7 @@ async def checkIfStreaming(guild, streamHour, wasStreaming):
     if not wasStreaming:
         streamHour = lastHour
     
-    if currHour != lastHour:
+    if currHour != streamHour:
         voiceChannel = await getHourChannel(lastHour, guild)
         textChannel = discord.utils.get(guild.text_channels, name="general")
 
