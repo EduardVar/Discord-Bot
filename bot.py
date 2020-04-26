@@ -33,20 +33,16 @@ async def move_task():
         if not userStreaming:
             if wasStreaming:
                 await moveInCategory(currHour, guild)
-
                 wasStreaming = False
-                print("A: !userStreaming and wasStreaming")
+
             else:
                 currHour, lastHour = await moveNewTime(currHour,
                                                        lastHour, guild)
                 await moveInCategory(currHour, guild)
-                #print("B: !userStreaming and !wasStreaming")
             
         else:         
             await moveInCategory(streamHour, guild)
-
             wasStreaming = True
-            print("C: userStreaming")
 
         await asyncio.sleep(1) # task runs every second
 
@@ -75,8 +71,7 @@ async def on_message(message):
     guild = discord.utils.get(client.guilds, name=GUILD)
 
     if mContent == "~assemble":
-        role = discord.utils.get(guild.roles, name="Avengerbots")
-        
+        role = discord.utils.get(guild.roles, name="Avengerbots")        
         response = "{}, Roll Out.".format(role.mention)
         await message.channel.send(response)
 
