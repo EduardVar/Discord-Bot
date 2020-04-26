@@ -75,11 +75,8 @@ async def on_message(message):
         response = "{}, Roll Out.".format(role.mention)
         await message.channel.send(response)
 
-    if mContent == "~streaming?":
-        voiceChannel = await getHourChannel(currHour, guild)
-
-        for member in voiceChannel.members:
-            print(member.name, ":", member.voice.self_stream)
+    if mContent == "~games?":
+        pass
 
 
 client.loop.create_task(move_task())

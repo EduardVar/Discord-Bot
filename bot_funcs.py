@@ -10,6 +10,7 @@ now = datetime.datetime.now()
 currHour = now.hour
 lastHour = currHour
 
+
 async def updateTime():
     global currHour
     global lastHour
@@ -20,6 +21,7 @@ async def updateTime():
     currHour = now.hour
 
     return currHour, lastHour
+
 
 async def checkIfStreaming(guild, streamHour, wasStreaming):
     global lastHour
@@ -48,18 +50,8 @@ async def checkIfStreaming(guild, streamHour, wasStreaming):
         lastHour = currHour
 
     return streaming, streamHour, wasStreaming
+
         
-
-async def stillStreaming(guild):
-    voiceChannel = await getHourChannel(lastHour, guild)
-
-    for member in voiceChannel.members:
-        if member.voice.self_stream:
-            return True
-
-    return False
-    
-
 async def moveNewTime(currHour, lastHour, guild):
     if currHour != lastHour:
         # Write code here to move people
@@ -74,6 +66,7 @@ async def moveNewTime(currHour, lastHour, guild):
     lastHour = currHour
     return currHour, lastHour
 
+
 async def moveInCategory(currHour, guild):
     # Category move
     timeCategory = discord.utils.get(guild.categories, name="Times")
@@ -85,6 +78,11 @@ async def moveInCategory(currHour, guild):
                 destination = await getHourChannel(currHour, guild)
                 await member.move_to(destination)
 
+
 async def getHourChannel(hour, guild):
     return discord.utils.get(guild.voice_channels, name=hourDic[hour])
                     
+
+async def showGamesPlayed(guild):
+    pass
+
