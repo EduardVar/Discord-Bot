@@ -76,7 +76,7 @@ async def on_message(message):
         await message.channel.send(response)
 
     if mContent == "~games?":
-        pass
+        print(await showGamesPlayed(guild))
 
 
 client.loop.create_task(move_task())

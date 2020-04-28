@@ -84,5 +84,33 @@ async def getHourChannel(hour, guild):
                     
 
 async def showGamesPlayed(guild):
-    pass
+    # Make dictionary, key = game, list of players = playing
+    gameDic = {}
+    outText = ""
+    guildMembers = guild.members
+
+    for member in guildMembers:
+        activity = member.activity
+
+        if activity != None and (activity.type == discord.ActivityType.playing
+                                 and type(activity) ==
+                                 discord.activity.Activity):
+            #print(str(member.display_name) + ":", str(activity.name))            
+            aName = activity.name
+
+            if aName in gameDic:
+                memArray = gameDic.pop(aName)
+                memArray.append(member.display_name)
+                gameDic[aName] = memArray
+            else:
+                gameDic[aName] = [member.display_name]
+                print(activity.assets)
+
+    if gameDic == {}:
+        return "No one is playing anything :("
+
+    #for key, players in gameDic.items():
+        
+
+    return gameDic
 
