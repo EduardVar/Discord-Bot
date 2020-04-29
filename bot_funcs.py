@@ -92,25 +92,48 @@ async def showGamesPlayed(guild):
     for member in guildMembers:
         activity = member.activity
 
+        print(member.name + ": " + str(activity))
+
+        if activity != None:
+            print(activity.type)
+            print(type(activity))
+
         if activity != None and (activity.type == discord.ActivityType.playing
                                  and type(activity) ==
-                                 discord.activity.Activity):
+                                 (discord.activity.Activity or
+                                 discord.activity.Game)):
             #print(str(member.display_name) + ":", str(activity.name))            
             aName = activity.name
 
             if aName in gameDic:
                 memArray = gameDic.pop(aName)
-                memArray.append(member.display_name)
+                memArray.append(member)
                 gameDic[aName] = memArray
             else:
-                gameDic[aName] = [member.display_name]
-                print(activity.assets)
+                gameDic[aName] = [member]
 
     if gameDic == {}:
         return "No one is playing anything :("
 
-    #for key, players in gameDic.items():
-        
+    for gameKey, players in gameDic.items():
+        outText += "__" + str(gameKey) + "__ (" + str(len(players)) + ")\n"
 
-    return gameDic
+        for player in players:
+            pActivity = player.activity
+            state, details = pActivity.state, pActivity.details
+
+            if state == None:
+                state = ""
+            if details == None:
+                details = ""
+            
+            outText += "**" + player.display_name + "** | "
+            outText += state + " - " + details
+            outText += "\n"
+
+        outText += "\n"
+
+    print(gameDic.keys())
+
+    return outText
 
