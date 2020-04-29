@@ -130,6 +130,9 @@ async def showGamesPlayed(guild):
                     
             except:
                 outText = outText
+
+            # pActivity.start returns date time! Find elapsed time
+            outText += " `[Started: " + str(pActivity.start) + "]`"
             
             outText += "\n"
 
