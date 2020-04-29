@@ -91,19 +91,15 @@ async def showGamesPlayed(guild):
 
     for member in guildMembers:
         activity = member.activity
+        
+        
 
-        print(member.name + ": " + str(activity))
+        #print(member.name + ": " + str(activity))
 
-        if activity != None:
-            print(activity.type)
-            print(type(activity))
-
-        if activity != None and (activity.type == discord.ActivityType.playing
-                                 and type(activity) ==
-                                 (discord.activity.Activity or
-                                 discord.activity.Game)):
-            #print(str(member.display_name) + ":", str(activity.name))            
+        if activity != None and (activity.type == discord.ActivityType.playing):         
             aName = activity.name
+            #print("Activity Type: " + str(activity.type))
+            #print(discord.Activity)
 
             if aName in gameDic:
                 memArray = gameDic.pop(aName)
@@ -118,22 +114,26 @@ async def showGamesPlayed(guild):
     for gameKey, players in gameDic.items():
         outText += "__" + str(gameKey) + "__ (" + str(len(players)) + ")\n"
 
-        for player in players:
+        for player in players:    
             pActivity = player.activity
-            state, details = pActivity.state, pActivity.details
+            state, details = "", ""
 
-            if state == None:
-                state = ""
-            if details == None:
-                details = ""
+            outText += "**" + player.display_name + "**"
+
+            try:
+                state, details = pActivity.state, pActivity.details
+
+                if state == None and details == None:
+                    outText = outText
+                else:
+                    outText += " | " + state + " - " + details
+                    
+            except:
+                outText = outText
             
-            outText += "**" + player.display_name + "** | "
-            outText += state + " - " + details
             outText += "\n"
 
         outText += "\n"
-
-    print(gameDic.keys())
 
     return outText
 
