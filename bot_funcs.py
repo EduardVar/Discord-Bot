@@ -7,6 +7,8 @@ hourDic = {0:"12 am", 1:"1 am", 2:"2 am", 3:"3 am", 4:"4 am", 5:"5 am",
            12:"12 pm", 13:"1 pm", 14:"2 pm", 15:"3 pm", 16:"4 pm", 17:"5 pm",
            18:"6 pm", 19:"7 pm", 20:"8 pm", 21:"9 pm", 22:"10 pm", 23:"11 pm"}
 
+specialGames = ["League of Legends", "Call of Duty®: Modern Warfare®"]
+                
 now = datetime.datetime.now()
 currHour = now.hour
 lastHour = currHour
@@ -130,7 +132,7 @@ async def showGamesPlayed(guild):
                 if state == None and details == None:
                     outText = outText
                 else:
-                    outText += " | " + details + " - " + state
+                    outText += " | " + details + " - " + state + " "
             except:
                 outText = outText
 
@@ -142,31 +144,39 @@ async def showGamesPlayed(guild):
                 
                 diff = datetime.datetime.now() - naiveStart
 
-                diff = (int)(diff.total_seconds())
+                diff = (int)(diff.total_seconds()) # Converts to seconds
                 secsInMin = 60
                 secsInHour = secsInMin * 60
                            
                 hours = divmod(diff, secsInHour)[0]
                 mins = divmod(diff, secsInMin)[0]
+                secs = diff % 60
 
-                
+                if gameKey not in specialGames:
+                    if hours == 0 and mins <= 1:
+                        outText += "`Just started playing`"
+                    elif hours == 0:
+                        outText += "`for " + str(mins) + " minute"
 
-                if hours == 0 and mins <= 1:
-                    outText += " `Just started playing`"
-                elif hours == 0:
-                    outText += " `for " + str(mins) + " minute"
-
-                    if mins > 1:
-                        outText += "s`"
+                        if mins > 1:
+                            outText += "s`"
+                        else:
+                            outText += "`"
                     else:
-                        outText += "`"
+                        outText += "`for " + str(hours) + " hour"
+
+                        if hours > 1:
+                            outText += "s`"
+                        else:
+                            outText += "`"
                 else:
-                    outText += " `for " + str(hours) + " hour"
-
-                    if hours > 1:
-                        outText += "s`"
-                    else:
-                        outText += "`"
+                    outText += "`"
+                    
+                    if hours >= 1:
+                        outText += str(hours).zfill(2)
+                        
+                    outText += str(mins).zfill(2) + ":" + str(secs).zfill(2)
+                    outText += " elapsed`"
             
             outText += "\n"
 
