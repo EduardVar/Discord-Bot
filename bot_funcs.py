@@ -1,4 +1,5 @@
 import datetime
+import pytz
 import discord
 
 hourDic = {0:"12 am", 1:"1 am", 2:"2 am", 3:"3 am", 4:"4 am", 5:"5 am",
@@ -111,6 +112,9 @@ async def showGamesPlayed(guild):
     if gameDic == {}:
         return "No one is playing anything :("
 
+    oldZone = pytz.timezone('UTC')
+    newZone = pytz.timezone("US/Eastern")
+
     for gameKey, players in gameDic.items():
         outText += "__" + str(gameKey) + "__ (" + str(len(players)) + ")\n"
 
@@ -126,13 +130,43 @@ async def showGamesPlayed(guild):
                 if state == None and details == None:
                     outText = outText
                 else:
-                    outText += " | " + state + " - " + details
-                    
+                    outText += " | " + details + " - " + state
             except:
                 outText = outText
 
             # pActivity.start returns date time! Find elapsed time
-            outText += " `[Started: " + str(pActivity.start) + "]`"
+            if pActivity.start != None:
+                localizedTime = oldZone.localize(pActivity.start)
+                adjustedTime = localizedTime.astimezone(newZone)
+                naiveStart = adjustedTime.replace(tzinfo=None)
+                
+                diff = datetime.datetime.now() - naiveStart
+
+                diff = (int)(diff.total_seconds())
+                secsInMin = 60
+                secsInHour = secsInMin * 60
+                           
+                hours = divmod(diff, secsInHour)[0]
+                mins = divmod(diff, secsInMin)[0]
+
+                
+
+                if hours == 0 and mins <= 1:
+                    outText += " `Just started playing`"
+                elif hours == 0:
+                    outText += " `for " + str(mins) + " minute"
+
+                    if mins > 1:
+                        outText += "s`"
+                    else:
+                        outText += "`"
+                else:
+                    outText += " `for " + str(hours) + " hour"
+
+                    if hours > 1:
+                        outText += "s`"
+                    else:
+                        outText += "`"
             
             outText += "\n"
 
