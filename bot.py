@@ -34,12 +34,10 @@ async def move_task():
             if wasStreaming:
                 await moveInCategory(currHour, guild)
                 wasStreaming = False
-
             else:
                 currHour, lastHour = await moveNewTime(currHour,
                                                        lastHour, guild)
-                await moveInCategory(currHour, guild)
-            
+                await moveInCategory(currHour, guild)            
         else:         
             await moveInCategory(streamHour, guild)
             wasStreaming = True

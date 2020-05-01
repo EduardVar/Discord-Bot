@@ -48,6 +48,8 @@ async def checkIfStreaming(guild, streamHour, wasStreaming):
                                 "everyone to the "
                                 "correct channel.").format(member.mention)
                     await textChannel.send(response)
+                    print("It is now", hourDic[currHour], "; but waiting on
+                          "someone who is streaming!")
 
         # Updates lastHour to currHour
         lastHour = currHour
@@ -94,15 +96,9 @@ async def showGamesPlayed(guild):
 
     for member in guildMembers:
         activity = member.activity
-        
-        
-
-        #print(member.name + ": " + str(activity))
 
         if activity != None and (activity.type == discord.ActivityType.playing):         
             aName = activity.name
-            #print("Activity Type: " + str(activity.type))
-            #print(discord.Activity)
 
             if aName in gameDic:
                 memArray = gameDic.pop(aName)
@@ -113,6 +109,8 @@ async def showGamesPlayed(guild):
 
     if gameDic == {}:
         return "No one is playing anything :("
+
+    # Will have to split up code here between two functions
 
     oldZone = pytz.timezone('UTC')
     newZone = pytz.timezone("US/Eastern")
@@ -143,8 +141,8 @@ async def showGamesPlayed(guild):
                 naiveStart = adjustedTime.replace(tzinfo=None)
                 
                 diff = datetime.datetime.now() - naiveStart
-
                 diff = (int)(diff.total_seconds()) # Converts to seconds
+                
                 secsInMin = 60
                 secsInHour = secsInMin * 60
                            
