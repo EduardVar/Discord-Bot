@@ -14,10 +14,12 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
 client = discord.Client()
+guild = discord.guild.Guild
 
 async def move_task():
     await client.wait_until_ready()
 
+    global guild
     guild = discord.utils.get(client.guilds, name=GUILD)
     streamHour = -1
 
@@ -46,7 +48,7 @@ async def move_task():
 
 @client.event
 async def on_ready():
-    guild = discord.utils.get(client.guilds, name=GUILD)
+    global guild
     print(
         f'{client.user.name} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})'
@@ -54,7 +56,7 @@ async def on_ready():
 
 @client.event
 async def on_member_join(member):
-    guild = discord.utils.get(client.guilds, name=GUILD)
+    global guild
     await member.create_dm()
     await member.dm_channel.send(
         f'Hi {member.name}, welcome to {guild.name}!'
@@ -65,8 +67,8 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    global guild
     mContent = message.content
-    guild = discord.utils.get(client.guilds, name=GUILD)
 
     if mContent == "~assemble":
         role = discord.utils.get(guild.roles, name="Avengerbots")        
@@ -76,7 +78,6 @@ async def on_message(message):
     if mContent == "~games?":
         response = await showGamesPlayed(guild)
         await message.channel.send(response)
-
 
 client.loop.create_task(move_task())
 client.run(TOKEN)
