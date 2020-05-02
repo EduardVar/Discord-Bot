@@ -2,6 +2,8 @@ import datetime
 import pytz
 import discord
 
+specialGames = ["League of Legends", "Call of Duty®: Modern Warfare®"]
+
 async def showGamesPlayed(guild):
     # Make dictionary, key = game, list of players = playing
     gameDic = {}
