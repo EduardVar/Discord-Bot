@@ -7,7 +7,8 @@ import discord
 import asyncio
 
 from dotenv import load_dotenv
-from bot_funcs import *
+from funcs.time_and_move import *
+from funcs.playing_games import *
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
