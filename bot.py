@@ -8,7 +8,7 @@ import asyncio
 
 from dotenv import load_dotenv
 from funcs.time_and_move import *
-from funcs.playing_games import *
+from funcs.playing_games import showGamesPlayed
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')

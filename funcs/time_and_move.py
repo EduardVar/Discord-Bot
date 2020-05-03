@@ -44,7 +44,7 @@ async def checkIfStreaming(guild, streamHour, wasStreaming):
                                 "everyone to the "
                                 "correct channel.").format(member.mention)
                     await textChannel.send(response)
-                    print("It is now", hourDic[currHour], "; but waiting on"
+                    print("It is now", hourDic[currHour], "; but waiting on "
                           "someone who is streaming!")
 
         # Updates lastHour to currHour
