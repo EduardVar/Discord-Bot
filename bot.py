@@ -9,6 +9,7 @@ import asyncio
 from dotenv import load_dotenv
 from funcs.time_and_move import *
 from funcs.playing_games import showGamesPlayed
+from funcs.misc_commands import *
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -76,8 +77,12 @@ async def on_message(message):
         response = "{}, Roll Out.".format(role.mention)
         await message.channel.send(response)
 
-    if mContent == "~games?":
-        response = await showGamesPlayed(guild)
+    elif mContent == "~games?":
+        response = await showGamesPlayed(guild)                   
+        await message.channel.send(response)
+
+    elif "~bruh" in mContent[0:5]:
+        response = await printBruh(mContent[6:])
         await message.channel.send(response)
 
 client.loop.create_task(move_task())
