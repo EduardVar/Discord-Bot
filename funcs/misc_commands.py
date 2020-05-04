@@ -7,8 +7,12 @@ async def printBruh(argument):
     try:
         amount = int(argument)
         
-        if amount > 400:
+        if amount > 400 or amount < -400:
             return "it's too long, bruh"
+        elif amount == 0:
+            return "no bruh"
+        elif amount < 0:
+            return "hurb " * -amount
         else:
             return "bruh " * amount
     except:
