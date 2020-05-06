@@ -14,6 +14,9 @@ from funcs.misc_commands import *
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
+Client_Id = os.getenv('CLIENT_ID')
+Client_Secret = os.getenv('CLIENT_SECRET')
+User_Agent = os.getenv('USER_AGENT')
 
 client = discord.Client()
 guild = discord.guild.Guild
