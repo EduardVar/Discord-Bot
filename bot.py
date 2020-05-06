@@ -14,9 +14,9 @@ from funcs.misc_commands import *
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
-Client_Id = os.getenv('CLIENT_ID')
-Client_Secret = os.getenv('CLIENT_SECRET')
-User_Agent = os.getenv('USER_AGENT')
+ID = os.getenv('CLIENT_ID')
+SECRET = os.getenv('CLIENT_SECRET')
+AGENT = os.getenv('USER_AGENT')
 
 client = discord.Client()
 guild = discord.guild.Guild
@@ -28,8 +28,18 @@ async def move_task():
     guild = discord.utils.get(client.guilds, name=GUILD)
     streamHour = -1
 
-    userStreaming = False
-    wasStreaming = False
+    _, prevHour = await updateTime()
+    prevHour = prevHour - 1 if prevHour - 1 >= 0 else 23
+    
+    vc = await getHourChannel(prevHour, guild)
+    startStreaming = False;
+    for member in vc.members:
+        if member.voice.self_stream:
+            startStreaming = True
+            streamHour = prevHour
+
+    userStreaming = startStreaming
+    wasStreaming = startStreaming
     
     while not client.is_closed():
         currHour, lastHour = await updateTime()
