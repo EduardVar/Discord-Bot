@@ -11,6 +11,8 @@ from funcs.time_and_move import *
 from funcs.playing_games import showGamesPlayed
 from funcs.misc_commands import *
 
+from scrapers.reddit_post import *
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
@@ -20,6 +22,8 @@ AGENT = os.getenv('USER_AGENT')
 
 client = discord.Client()
 guild = discord.guild.Guild
+
+initPraw(ID, SECRET, AGENT)
 
 async def move_task():
     await client.wait_until_ready()
