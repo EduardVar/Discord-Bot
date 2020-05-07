@@ -102,5 +102,13 @@ async def on_message(message):
         response = await printBruh(mContent[6:])
         await message.channel.send(response)
 
+    elif mContent == "~cursed":
+        response = getImagePost("cursedimages")
+        await message.channel.send(response)
+
+    elif mContent == "~blursed":
+        response = getImagePost("blursedimages")
+        await message.channel.send(response)
+
 client.loop.create_task(move_task())
 client.run(TOKEN)
