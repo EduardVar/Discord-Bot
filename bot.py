@@ -110,7 +110,7 @@ async def on_message(message):
         response = getImagePost("blursedimages")
         await message.channel.send(response)
 
-    elif mContent == "~loli":
+    elif mContent == "~aww":
         response = getPicLink("awwnime")
         await message.channel.send(response)
 
