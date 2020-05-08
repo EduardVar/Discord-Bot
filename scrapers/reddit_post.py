@@ -14,5 +14,6 @@ def getImagePost(sub):
         submission = subreddit.random()
         flairText = submission.link_flair_text
 
-        if flairText == None or flairText.lower() != "announcement":
+        if ((flairText == None and flairText is not type(None))
+            or flairText.lower() != "announcement"):
             return submission.url
