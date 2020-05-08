@@ -110,5 +110,9 @@ async def on_message(message):
         response = getImagePost("blursedimages")
         await message.channel.send(response)
 
+    elif mContent == "~loli":
+        response = getPicLink("awwnime")
+        await message.channel.send(response)
+
 client.loop.create_task(move_task())
 client.run(TOKEN)

@@ -1,4 +1,5 @@
 import praw
+import random
 
 reddit = praw.reddit.Reddit
 
@@ -14,6 +15,21 @@ def getImagePost(sub):
         submission = subreddit.random()
         flairText = submission.link_flair_text
 
-        if ((flairText == None and flairText is not type(None))
-            or flairText.lower() != "announcement"):
-            return submission.url
+        try:
+            if flairText.lower() != "announcement":
+                return submission.url
+        except:
+            print("Failed post", submission.url)
+
+def getPicLink(sub):
+    subreddit = reddit.subreddit(sub)
+    listingGen = subreddit.hot()
+
+    whichPost = random.randint(1, 101)
+    counter = 1
+
+    for post in listingGen:
+        if counter == whichPost:
+            return post.url
+        else:
+            counter += 1
