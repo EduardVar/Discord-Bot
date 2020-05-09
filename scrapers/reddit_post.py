@@ -15,11 +15,15 @@ def getImagePost(sub):
         submission = subreddit.random()
         flairText = submission.link_flair_text
 
-        try:
+        if flairText is None:
+            flairText = ""
+
+        try:        
             if flairText.lower() != "announcement":
                 return submission.url
-        except:
-            print("Failed post", submission.url)
+        except Exception as e:
+            print("Failed post", submission)
+            print(e)
 
 def getPicLink(sub):
     subreddit = reddit.subreddit(sub)
