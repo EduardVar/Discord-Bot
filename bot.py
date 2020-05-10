@@ -1,17 +1,12 @@
 # bot.py
 import os
-import random
-import datetime
-
 import discord
 import asyncio
 
 from dotenv import load_dotenv
 from funcs.time_and_move import *
-from funcs.playing_games import showGamesPlayed
-from funcs.misc_commands import *
 
-from scrapers.reddit_post import *
+from message_responses import *
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -86,33 +81,8 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    global guild
     mContent = message.content
-
-    if mContent == "~assemble":
-        role = discord.utils.get(guild.roles, name="Avengerbots")        
-        response = "{}, Roll Out.".format(role.mention)
-        await message.channel.send(response)
-
-    elif mContent == "~games?":
-        response = await showGamesPlayed(guild)                   
-        await message.channel.send(response)
-
-    elif "~bruh" in mContent[0:5]:
-        response = await printBruh(mContent[6:])
-        await message.channel.send(response)
-
-    elif mContent == "~cursed":
-        response = getImagePost("cursedimages")
-        await message.channel.send(response)
-
-    elif mContent == "~blursed":
-        response = getImagePost("blursedimages")
-        await message.channel.send(response)
-
-    elif mContent == "~aww":
-        response = getPicLink("awwnime")
-        await message.channel.send(response)
+    await checkMessage(guild, message, mContent)
 
 client.loop.create_task(move_task())
 client.run(TOKEN)
