@@ -52,3 +52,21 @@ async def timeChangeLogic(guild, streamHour, userStreaming, wasStreaming):
         wasStreaming = True
 
     return userStreaming, wasStreaming
+
+
+async def setupMoveTask(guild):
+    streamHour = -1
+
+    _, prevHour = await updateTime()
+    prevHour = prevHour - 1 if prevHour - 1 >= 0 else 23
+    
+    vc = await getHourChannel(prevHour, guild)
+    startStreaming = False;
+    for member in vc.members:
+        if member.voice.self_stream:
+            startStreaming = True
+            streamHour = prevHour
+
+    return streamHour, startStreaming, startStreaming
+
+    

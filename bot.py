@@ -22,20 +22,8 @@ async def move_task():
     await client.wait_until_ready()
 
     global guild
-    guild = discord.utils.get(client.guilds, name=GUILD)
-    streamHour = -1
-
-    _, prevHour = await updateTime()
-    prevHour = prevHour - 1 if prevHour - 1 >= 0 else 23
-    
-    vc = await getHourChannel(prevHour, guild)
-    startStreaming = False;
-    for member in vc.members:
-        if member.voice.self_stream:
-            startStreaming = True
-            streamHour = prevHour
-
-    userStreaming, wasStreaming = startStreaming, startStreaming
+    guild = discord.utils.get(client.guilds, name=GUILD)   
+    streamHour, userStreaming, wasStreaming = await setupMoveTask(guild)
     
     while not client.is_closed():
         uS, wS = await timeChangeLogic(guild, streamHour,
@@ -65,8 +53,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    mContent = message.content
-    await checkMessage(guild, message, mContent)
+    await checkMessage(guild, message, message.content)
 
 client.loop.create_task(move_task())
 client.run(TOKEN)
