@@ -3,10 +3,9 @@ import os
 import discord
 import asyncio
 
-from dotenv import load_dotenv
-from funcs.time_and_move import *
+from main_uses import *
 
-from message_responses import *
+from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -17,7 +16,6 @@ AGENT = os.getenv('USER_AGENT')
 
 client = discord.Client()
 guild = discord.guild.Guild
-
 initPraw(ID, SECRET, AGENT)
 
 async def move_task():
@@ -37,26 +35,12 @@ async def move_task():
             startStreaming = True
             streamHour = prevHour
 
-    userStreaming = startStreaming
-    wasStreaming = startStreaming
+    userStreaming, wasStreaming = startStreaming, startStreaming
     
     while not client.is_closed():
-        currHour, lastHour = await updateTime()
-
-        a, b, c = await checkIfStreaming(guild, streamHour, wasStreaming)
-        userStreaming, streamHour, wasStreaming = a, b, c
-        
-        if not userStreaming:
-            if wasStreaming:
-                await moveInCategory(currHour, guild)
-                wasStreaming = False
-            else:
-                currHour, lastHour = await moveNewTime(currHour,
-                                                       lastHour, guild)
-                await moveInCategory(currHour, guild)            
-        else:         
-            await moveInCategory(streamHour, guild)
-            wasStreaming = True
+        uS, wS = await timeChangeLogic(guild, streamHour,
+                                       userStreaming, wasStreaming)
+        userStreaming, wasStreaming = uS, wS
 
         await asyncio.sleep(1) # task runs every second
 

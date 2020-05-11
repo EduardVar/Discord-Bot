@@ -4,6 +4,8 @@ from funcs.playing_games import showGamesPlayed
 from funcs.misc_commands import *
 from scrapers.reddit_post import *
 
+from funcs.time_and_move import *
+
 async def checkMessage(guild, message, mContent):
     if mContent == "~assemble":
         role = discord.utils.get(guild.roles, name="Avengerbots")        
@@ -29,3 +31,24 @@ async def checkMessage(guild, message, mContent):
     elif mContent == "~aww":
         response = getPicLink("awwnime")
         await message.channel.send(response)
+
+
+async def timeChangeLogic(guild, streamHour, userStreaming, wasStreaming):
+    currHour, lastHour = await updateTime()
+
+    a, b, c = await checkIfStreaming(guild, streamHour, wasStreaming)
+    userStreaming, streamHour, wasStreaming = a, b, c
+    
+    if not userStreaming:
+        if wasStreaming:
+            await moveInCategory(currHour, guild)
+            wasStreaming = False
+        else:
+            currHour, lastHour = await moveNewTime(currHour,
+                                                   lastHour, guild)
+            await moveInCategory(currHour, guild)            
+    else:         
+        await moveInCategory(streamHour, guild)
+        wasStreaming = True
+
+    return userStreaming, wasStreaming
