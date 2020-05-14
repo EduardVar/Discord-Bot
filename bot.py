@@ -55,6 +55,7 @@ async def on_message(message):
         return
 
     await checkMessage(guild, message, message.content)
+    await bot.process_commands(message)
 
 # Won't run while on_message is a thing (will have to test)
 @bot.command(name='tester', help='Trying to see if help works with test too!')
