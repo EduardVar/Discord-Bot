@@ -21,9 +21,10 @@ initPraw(ID, SECRET, AGENT)
 
 async def move_task():
     await bot.wait_until_ready()
-
+    
     global guild
     guild = discord.utils.get(bot.guilds, name=GUILD)
+    
     streamHour, userStreaming, wasStreaming = await setupMoveTask(guild)
     
     while not bot.is_closed():
@@ -54,14 +55,40 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
-    await checkMessage(guild, message, message.content)
     await bot.process_commands(message)
 
-# Won't run while on_message is a thing (will have to test)
-@bot.command(name='tester', help='Trying to see if help works with test too!')
-async def testerCommand(ctx):
-    response = "It's working"
+
+@bot.command(name='assemble', help='--> @ the AvengerBots')
+async def assembleCompand(ctx):
+    role = discord.utils.get(guild.roles, name="Avengerbots")        
+    response = "{}, Roll Out.".format(role.mention)
     await ctx.send(response)
+
+@bot.command(name='games?', help='--> Shows what games people are playing')
+async def gamesCommand(ctx):
+    response = await showGamesPlayed(guild)                   
+    await ctx.send(response)
+
+@bot.command(name='bruh', help='--> Adds a number after bruh to repeat it')
+async def bruhCommand(ctx):
+    response = await printBruh(ctx.message.content[6:])
+    await ctx.send(response)
+
+@bot.command(name='cursed', help='--> Sends an image from r/cursedimages')
+async def bruhCommand(ctx):
+    response = getImagePost("cursedimages")
+    await ctx.send(response)
+
+@bot.command(name='blursed', help='--> Sends an image from r/blusedimages')
+async def bruhCommand(ctx):
+    response = getImagePost("blursedimages")
+    await ctx.send(response)
+
+@bot.command(name='aww', help='--> Sends an image from r/awwnime')
+async def bruhCommand(ctx):
+    response = getPicLink("awwnime")
+    await ctx.send(response)
+    
 
 bot.loop.create_task(move_task())
 bot.run(TOKEN)
