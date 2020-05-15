@@ -69,7 +69,8 @@ async def gamesCommand(ctx):
     response = await showGamesPlayed(guild)                   
     await ctx.send(response)
 
-@bot.command(name='bruh', help='--> Adds a number after bruh to repeat it')
+@bot.command(name='bruh', help='--> You can add a number after bruh to'
+             ' repeat the phrase [-400, 400]')
 async def bruhCommand(ctx):
     response = await printBruh(ctx.message.content[6:])
     await ctx.send(response)
