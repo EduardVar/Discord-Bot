@@ -82,3 +82,8 @@ async def moveInCategory(currHour, guild):
 
 async def getHourChannel(hour, guild):
     return discord.utils.get(guild.voice_channels, name=hourDic[hour])
+
+async def getTimeFromChannel(channel):  
+    for i, hour in hourDic.items():
+        if channel.name == hour:
+            return i

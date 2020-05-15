@@ -29,16 +29,16 @@ async def timeChangeLogic(guild, streamHour, userStreaming, wasStreaming):
 
 async def setupMoveTask(guild):
     streamHour = -1
-
-    _, prevHour = await updateTime()
-    prevHour = prevHour - 1 if prevHour - 1 >= 0 else 23
+    startStreaming = False
     
-    vc = await getHourChannel(prevHour, guild)
-    startStreaming = False;
-    for member in vc.members:
-        if member.voice.self_stream:
-            startStreaming = True
-            streamHour = prevHour
+    timeCategory = discord.utils.get(guild.categories, name="Times")
+    vcs = timeCategory.voice_channels
+    
+    for channel in vcs:
+        for member in channel.members:
+            if member.voice.self_stream:
+                streamHour = await getTimeFromChannel(channel)
+                startStreaming = True
 
     return streamHour, startStreaming, startStreaming
 
