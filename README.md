@@ -3,7 +3,11 @@ Python-based virtual bot to manage and automatize personal discord server.
 
 ## Features
 * The server has a voice channel for each hour of the day (from 12 am to 11 pm). These voice channels are all sorted under the TIME category. Will automatically move users to the correct voice channel depending on what time of the day it is. 
-  * (Ex: at 4:32 pm, all users that are in voice communications for discord will reside in the *4 pm* voice channel. At 5:00 pm, all users in the *4 pm* voice channel are moved by the bot to the *5 pm* voice channel)
+  * (Ex: at 4:32 pm, all users that are in voice communications for the server will reside in the *4 pm* voice channel. At 5:00 pm, all users in the *4 pm* voice channel are moved by the bot to the *5 pm* voice channel)
+  * Any user who joins the wrong voice channel will be automatically moved to the correct voice channel. (Updates every second)
+  * Additional functionality regarding if a user is streaming through discord in one of the timed voice channels. Every time a user moves from one voice channel to another, their stream ends and the streamer has to restart it.
+    * On bot launch, checks if anyone is streaming in any of the voice channels. Make's sure to wait for all streams to end before moving users to the correct channel.
+    * 
 
 ## Commands
 Type **~help** for info on what commands are available
