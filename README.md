@@ -8,6 +8,8 @@ Python-based virtual bot to manage and automatize personal discord server.
   * Additional functionality regarding if a user is streaming through discord in one of the timed voice channels. Every time a user moves from one voice channel to another, their stream ends and the streamer has to restart it.
     * On bot launch, checks if anyone is streaming in any of the voice channels. Make's sure to wait for all streams to end before moving users to the correct channel.
     * In addition, if a user is already streaming upon a time change, will send each streaming user a message and mention them in the general chat.
+      * Once, all users are not streaming, will automatically move all members in voice chat to the correct channel.
+    * Checks if user in the correct channel ever 1 second (since start of the bot).
 
 ## Commands
 Type **~help** for info on what commands are available
