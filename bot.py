@@ -41,6 +41,7 @@ async def on_ready():
         f'{bot.user.name} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})'
     )
+    await bot.change_presence(activity=discord.Game(name='~help'))
 
 @bot.event
 async def on_member_join(member):
