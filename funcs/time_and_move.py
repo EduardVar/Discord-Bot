@@ -29,6 +29,15 @@ async def checkIfStreaming(guild, streamHour, wasStreaming):
 
     if not wasStreaming:
         streamHour = lastHour
+
+    timeCategory = discord.utils.get(guild.categories, name="Times")
+    vcs = timeCategory.voice_channels
+    
+    for channel in vcs:
+        for member in channel.members:
+            if member.voice.self_stream:
+                streamHour = await getTimeFromChannel(channel)
+                wasStreaming = True
     
     if currHour != streamHour:
         voiceChannel = await getHourChannel(streamHour, guild) #lastHour
