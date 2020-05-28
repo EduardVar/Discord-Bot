@@ -77,20 +77,23 @@ async def bruhCommand(ctx):
     await ctx.send(response)
 
 @bot.command(name='cursed', help='--> Sends an image from r/cursedimages')
-async def bruhCommand(ctx):
+async def cursedCommand(ctx):
     response = getImagePost("cursedimages")
     await ctx.send(response)
 
 @bot.command(name='blursed', help='--> Sends an image from r/blusedimages')
-async def bruhCommand(ctx):
+async def blursedCommand(ctx):
     response = getImagePost("blursedimages")
     await ctx.send(response)
 
 @bot.command(name='aww', help='--> Sends an image from r/awwnime')
-async def bruhCommand(ctx):
+async def awwCommand(ctx):
     response = getPicLink("awwnime")
     await ctx.send(response)
-    
+
+@bot.command(name='simp', help='--> Sends an image of simp')
+async def simpCommand(ctx):
+    await ctx.send(file=discord.File('images/simp_death.png'))
 
 bot.loop.create_task(move_task())
 bot.run(TOKEN)
