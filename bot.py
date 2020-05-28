@@ -91,9 +91,9 @@ async def awwCommand(ctx):
     response = getPicLink("awwnime")
     await ctx.send(response)
 
-@bot.command(name='simp', help='--> Sends an image of simp')
+@bot.command(name='admin', help='--> Jason\'s timeless quote')
 async def simpCommand(ctx):
-    await ctx.send(file=discord.File('images/simp_death.png'))
+    await ctx.send(file=discord.File('images/admin_death.png'))
 
 bot.loop.create_task(move_task())
 bot.run(TOKEN)
