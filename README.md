@@ -17,6 +17,7 @@ Type **~help** for info on what commands are available
 ### Using the "~" prefix
 | Command | Description |
 | --- | --- |
+| admin | Sends an image of the admin consequences |
 | assemble | @ the AvengerBots |
 | aww | Sends an image from r/awwnime |
 | blursed | Sends an image from r/blusedimages |
